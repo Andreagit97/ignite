@@ -14,6 +14,21 @@ ARG ARCH
 ARG GOARCH
 ARG ARCH_MAKE_PARAMS
 
+RUN apt update && apt install fakeroot rsync cpio python3 libdw-dev cmake liblz4-tool -y
+
+# Install pahole
+RUN  git clone --branch v1.22 --single-branch https://github.com/acmel/dwarves.git; \
+    cd dwarves; \
+    mkdir bulid && cd bulid; \
+    cmake -D__LIB=lib ../; \
+    make install; \
+    ln -s /usr/local/lib/libdwarves.so.1 /usr/lib/; \
+    ln -s /usr/local/lib/libdwarves_reorganize.so.1 /usr/lib/; \
+    ln -s /usr/local/lib/libdwarves_emit.so.1 /usr/lib/
+
+ENV PATH "$PATH:/usr/local"
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"
+
 # Clone the desired kernel version and make sure the environment is clean
 RUN mkdir -p ${SRC_DIR} ${CCACHE_DIR} ${DIST_DIR} && \
     git clone --depth 1 --branch v${KERNEL_VERSION} ${LINUX_REPO_URL} ${LINUX_DIR} && \
