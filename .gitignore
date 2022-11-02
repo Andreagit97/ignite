@@ -6,3 +6,5 @@ bin
 images/kubeadm/run
 images/alpine/alpine.*
 site
+images/kernel/versioned/*
+images/kernel/generated/*
