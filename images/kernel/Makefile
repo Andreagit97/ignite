@@ -25,13 +25,14 @@ CTR := $(DOCKER) run -i --rm \
 		linuxkit/containerd:751de142273e1b5d2d247d2832d654ab92e907bc \
 		ctr
 
-REGISTRY?=weaveworks
-IMAGE_NAME?=${REGISTRY}/ignite-kernel
+REGISTRY?=docker.io
+IMAGE_NAME?=aldokcl/dronet
 KERNEL_BUILDER_NAME=${REGISTRY}/ignite-kernel-builder
 # Check https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/refs/ for updates
-KERNEL_VERSIONS ?= 4.14.254 4.19.215 5.4.157 5.10.77 5.14.16 # If you update this, please keep the .github/workflows/release-kernel-images.yml matrix up to date
+
+KERNEL_VERSIONS ?= 5.8.18 5.9.16 5.10.152 5.11.22 5.12.19 5.13.19 5.14.21 5.15.76 5.16.20 5.17.15 5.18.19 5.19.17 6.0.6 # If you update this, please keep the .github/workflows/release-kernel-images.yml matrix up to date
 GOARCH?=amd64
-GOARCH_LIST = amd64 arm64
+GOARCH_LIST = amd64
 
 ifeq ($(GOARCH),amd64)
 KERNEL_ARCH=x86

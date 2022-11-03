@@ -1,4 +1,4 @@
-FROM weaveworks/ignite-kernel-builder:dev AS builder
+FROM aldokcl/dronet:firecracker-build-pahole-122 AS builder
 
 # Set up environment variables
 ENV CCACHE_DIR=/ccache       \
@@ -14,6 +14,17 @@ ARG ARCH
 ARG GOARCH
 ARG ARCH_MAKE_PARAMS
 
+#RUN apt update && apt install fakeroot rsync cpio python3 libdw-dev cmake liblz4-tool -y
+#
+#RUN git clone  --branch v1.22 --single-branch https://github.com/acmel/dwarves.git
+#RUN cd dwarves && mkdir build && cd build && cmake -D__LIB=lib ../ && make install
+#RUN  ln -s /usr/local/lib/libdwarves.so.1 /usr/lib/
+#RUN  ln -s /usr/local/lib/libdwarves_reorganize.so.1 /usr/lib/
+#RUN  ln -s /usr/local/lib/libdwarves_emit.so.1 /usr/lib/
+#ENV  PATH "$PATH:/usr/local"
+#ENV  LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib/"
+#RUN echo $PATH
+
 # Clone the desired kernel version and make sure the environment is clean
 RUN mkdir -p ${SRC_DIR} ${CCACHE_DIR} ${DIST_DIR} && \
     git clone --depth 1 --branch v${KERNEL_VERSION} ${LINUX_REPO_URL} ${LINUX_DIR} && \
@@ -27,7 +38,7 @@ COPY generated/config-${GOARCH}-${KERNEL_VERSION}${KERNEL_EXTRA} .config
 RUN make ${ARCH_MAKE_PARAMS} EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= olddefconfig
 
 RUN	make ${ARCH_MAKE_PARAMS} EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= -j32
-RUN make ${ARCH_MAKE_PARAMS} EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= modules_install
+RUN make ${ARCH_MAKE_PARAMS} EXTRAVERSION=${KERNEL_EXTRA} LOCALVERSION= INSTALL_MOD_STRIP=1 modules_install
 
 # VMLINUX_PATH is configurable, as the arm64 kernel to be booted by Firecracker is present
 # in arch/arm64/boot/Image.

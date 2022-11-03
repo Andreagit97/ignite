@@ -25,10 +25,14 @@ set_kernel_config() {
 
 unset_kernel_config() {
     # unsets flag with the value of $1, config file as $2
+    echo "unset value: ${1}"
+    echo "file config: ${2}"
     local TGT="CONFIG_${1#CONFIG_}"
-    local FILE=${3}
-    sed "s/^${TGT}=.*/# ${TGT} is not set/" ${NEW_CONFIG_FILE} > ${NEW_CONFIG_FILE}.replaced
-    mv ${NEW_CONFIG_FILE}.replaced ${NEW_CONFIG_FILE}
+    local FILE=${2}
+    echo "target to unset: ${TGT}"
+    sed "s/^${TGT}=.*/# ${TGT} is not set/" ${FILE} > ${FILE}.replaced
+    cat ${FILE}.replaced | grep ${TGT}
+    mv ${FILE}.replaced ${FILE}
 }
 
 patch_file() {
@@ -57,4 +61,7 @@ cp ${OLD_FILE} ${NEW_FILE}
 tail -c1 "${NEW_FILE}" | read -r _ || echo >> "${NEW_FILE}"
 # Apply patches to the new file
 patch_file ${NEW_FILE}
+
+#
+#sleep 1d
 

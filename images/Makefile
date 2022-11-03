@@ -194,3 +194,5 @@ build-ubuntu:
 	$(MAKE) ${OP} WHAT=ubuntu         RELEASE=18.04                                                    IS_MANIFEST_LIST=1  GOARCH=amd64
 	$(MAKE) ${OP} WHAT=ubuntu         RELEASE=20.04                                    IS_LATEST=true  IS_MANIFEST_LIST=1  GOARCH=arm64
 	$(MAKE) ${OP} WHAT=ubuntu         RELEASE=20.04                                    IS_LATEST=true  IS_MANIFEST_LIST=1  GOARCH=amd64
+	$(MAKE) ${OP} WHAT=ubuntu         RELEASE=22.04                                    IS_LATEST=true  IS_MANIFEST_LIST=1  GOARCH=arm64
+	$(MAKE) ${OP} WHAT=ubuntu         RELEASE=22.04                                    IS_LATEST=true  IS_MANIFEST_LIST=1  GOARCH=amd64
